@@ -39,7 +39,11 @@ def parse_command(bot, from_, target, message):
 				bot.notice(nick, str(module) + ' reloaded')
 	for module in MODULES:
 		if command in module.COMMANDS:
-			module.do_command(bot, bitcoin, from_, target, command, args)
+			# check for minimum command arity
+			if len(args) < module.COMMANDS[command]:
+				module.usage(bot, nick, command)
+			else:
+				module.do_command(bot, bitcoin, from_, target, command, args)
 
 
 def is_identified(bot, nick):
