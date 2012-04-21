@@ -1,9 +1,10 @@
 from modules import bitcoin
+from modules import gambling
 from jsonrpc import ServiceProxy
 import imp
 
 # TODO figure out a way to load this dynamically
-MODULES = [ bitcoin ]
+MODULES = [ bitcoin, gambling ]
 
 
 # TODO relocate this code and add functions to help with bitcoin distribution
@@ -36,7 +37,7 @@ def parse_command(bot, from_, target, message):
 		if command == 'reload':
 			for module in MODULES:
 				imp.reload(module)
-				bot.notice(nick, str(module) + ' reloaded')
+				bot.notice(nick, module.__name__ + ' reloaded')
 	for module in MODULES:
 		if command in module.COMMANDS:
 			# check for minimum command arity
