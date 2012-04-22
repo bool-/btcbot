@@ -12,7 +12,7 @@ class BitBot(lurklib.Client):
 			message = message[1:]
 			commands.parse_command(self, from_, channel, message)
 	def on_privmsg(self, from_, message):
-		if message.startswth('+'):
+		if message.startswith('+'):
 			message = message[1:]
 			commands.parse_command(self, from_, from_[0], message)
 	def on_quit(self, from_, reason):

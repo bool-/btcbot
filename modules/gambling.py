@@ -19,6 +19,7 @@ def roulette(chamber):
 
 def do_command(bot, bitcoin, from_, target, command, args):
 	nick = from_[0]
+	nick = nick.lower()
 	try:
 		if command == 'roulette':
 			if not is_int(args[0]):
@@ -38,7 +39,7 @@ def do_command(bot, bitcoin, from_, target, command, args):
 				roulette_bal = round(roulette_bal * 0.85, 3)
 				bitcoin.jsonrpc.move('roulette', nick, roulette_bal)
 				bot.notice(nick, 'The gun went *CLICK* and you won ' + str(roulette_bal) + ' BTC.')
-				bot.privmsg('##btcbot', nick + '\'s gun went *CLICK*, winning them ' + str(roulette_bal) + ' BTC.')
+				bot.privmsg('##btcbot', from_[0] + '\'s gun went *CLICK*, winning them ' + str(roulette_bal) + ' BTC.')
 			else:
 				bot.notice(nick, 'The gun went *BANG* and you lost ' + str(WAGER) + ' BTC.')
 

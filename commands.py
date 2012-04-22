@@ -7,6 +7,7 @@ import imp
 MODULES = [ bitcoin, gambling ]
 
 
+
 # TODO relocate this code and add functions to help with bitcoin distribution
 class BitcoinHelper():
 	def __init__(self):
