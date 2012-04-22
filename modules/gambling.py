@@ -29,15 +29,15 @@ def do_command(bot, bitcoin, from_, target, command, args):
 			if chamber < 1 or chamber > 6:
 				bot.notice(nick, 'Please enter a valid chamber number 1-6')
 				return
-			balance = bitcoin.jsonrpc.getbalance(nick, 1)
+			balance = bitcoin.getbalance(nick, 1)
 			if WAGER > balance:
 				bot.notice(nick, 'Sorry, you don\'t have ' + str(WAGER) + ' BTC in your balance')
 				return
-			bitcoin.jsonrpc.move(nick, 'roulette', WAGER)
+			bitcoin.move(nick, 'roulette', WAGER)
 			if roulette(chamber):
-				roulette_bal = float(bitcoin.jsonrpc.getbalance('roulette', 1))
+				roulette_bal = float(bitcoin.getbalance('roulette', 1))
 				roulette_bal = round(roulette_bal * 0.85, 3)
-				bitcoin.jsonrpc.move('roulette', nick, roulette_bal)
+				bitcoin.move('roulette', nick, roulette_bal)
 				bot.notice(nick, 'The gun went *CLICK* and you won ' + str(roulette_bal) + ' BTC.')
 				bot.privmsg('##btcbot', from_[0] + '\'s gun went *CLICK*, winning them ' + str(roulette_bal) + ' BTC.')
 			else:

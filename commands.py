@@ -6,14 +6,7 @@ import imp
 # TODO figure out a way to load this dynamically
 MODULES = [ bitcoin, gambling ]
 
-
-
-# TODO relocate this code and add functions to help with bitcoin distribution
-class BitcoinHelper():
-	def __init__(self):
-		self.jsonrpc = ServiceProxy('http://btcbot:password@127.0.0.1:8332')
-
-bitcoin = BitcoinHelper()
+bitcoin = ServiceProxy('http://btcbot:password@127.0.0.1:8332')
 
 def parse_command(bot, from_, target, message):
 	nick = from_[0]
