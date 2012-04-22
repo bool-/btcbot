@@ -1,10 +1,11 @@
 from modules import bitcoin
 from modules import gambling
+from modules import raffle
 from jsonrpc import ServiceProxy
 import imp
 
 # TODO figure out a way to load this dynamically
-MODULES = [ bitcoin, gambling ]
+MODULES = [ bitcoin, gambling, raffle ]
 
 bitcoin = ServiceProxy('http://btcbot:password@127.0.0.1:8332')
 
