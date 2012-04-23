@@ -1,8 +1,8 @@
 import lurklib
 import commands
 import json
+import sys
 
-config = json.loads(open('config.json').read())
 
 class BitBot(lurklib.Client):
 
@@ -26,6 +26,20 @@ class BitBot(lurklib.Client):
 			self.identified_users.remove(from_[0])
 
 if __name__ == '__main__':
+	global config
+	if len(sys.argv) > 1:
+		try:
+			data = open(sys.argv[1]).read()
+			if data != None:
+				config = json.loads(data)
+			else:
+				print('USAGE: python bot.py <config=config.json>')
+				sys.exit()
+		except IOError:
+			print('USAGE: python bot.py <config=config.json>')
+			sys.exit()
+	else:
+		config = json.loads(open('config.json').read())
 	print('Starting BitBot')
 	commands.load_modules(config['modules'])
 	commands.connect_bitcoind(config['bitcoin']['user'], config['bitcoin']['pass'], config['bitcoin']['server'], config['bitcoin']['port'])

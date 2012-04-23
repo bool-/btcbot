@@ -1,10 +1,6 @@
 from jsonrpc import ServiceProxy
 import imp
 
-MODULES = [ ]
-
-bitcoin = None
-
 context = { }
 
 def load_modules(modules):
