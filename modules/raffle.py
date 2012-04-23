@@ -2,8 +2,8 @@ from jsonrpc import JSONRPCException
 import random
 
 COMMANDS = { 'raffle':0 }
-TIPPING_POINT = 0.04
-TICKET_PRICE = 0.01
+TIPPING_POINT = 1
+TICKET_PRICE = 0.05
 COMMISSION_ACCOUNT = 'bool_'
 
 tickets = []
@@ -27,8 +27,10 @@ def is_int(val):
 		return False
 	return True
 
-def do_command(bot, bitcoin, from_, target, command, args):
+def do_command(context, from_, target, command, args):
 	nick = from_[0].lower()
+	bot = context['bot']
+	bitcoin = context['bitcoin']
 	try:
 		if command == 'raffle':
 			ticket_count = 1

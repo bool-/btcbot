@@ -1,5 +1,8 @@
 import lurklib
 import commands
+import json
+
+config = json.loads(open('config/bot.json').read())
 
 class BitBot(lurklib.Client):
 
@@ -24,5 +27,7 @@ class BitBot(lurklib.Client):
 
 if __name__ == '__main__':
 	print('Starting BitBot')
-	bot = BitBot(server='wright.freenode.net', nick=('btcbot', 'btcbot_'), user='btcbot', tls=False)
-	bot.mainloop()
+	commands.load_modules(config['modules'])
+	for server in config['servers']:
+		bot = BitBot(server=server['server'], nick=server['nick'], user=server['user'], tls=False)
+		bot.mainloop()

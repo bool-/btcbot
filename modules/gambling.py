@@ -17,9 +17,11 @@ def roulette(chamber):
 		return True
 	return False
 
-def do_command(bot, bitcoin, from_, target, command, args):
+def do_command(context, from_, target, command, args):
 	nick = from_[0]
 	nick = nick.lower()
+	bot = context['bot']
+	bitcoin = context['bitcoin']
 	try:
 		if command == 'roulette':
 			if not is_int(args[0]):

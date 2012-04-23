@@ -5,15 +5,23 @@ from jsonrpc import ServiceProxy
 import imp
 
 # TODO figure out a way to load this dynamically
-MODULES = [ bitcoin, gambling, raffle ]
+MODULES = [ ]
 
 bitcoin = ServiceProxy('http://btcbot:password@127.0.0.1:8332')
+
+context =  { 'bitcoin': bitcoin }
+
+def load_modules(modules):
+	for module in modules:
+		imp_module = __import__(module, globals(), locals(), [module.split('.')[1]], -1)
+		MODULES.append(imp_module)
 
 def parse_command(bot, from_, target, message):
 	nick = from_[0]
 	message_tokens = message.split()
 	command = message_tokens[0]
 	args = message_tokens[1:]
+	context['bot'] = bot
 
 	if command == 'ident':
 		if nick in bot.identified_users:
@@ -39,7 +47,7 @@ def parse_command(bot, from_, target, message):
 			if len(args) < module.COMMANDS[command]:
 				module.usage(bot, nick, command)
 			else:
-				module.do_command(bot, bitcoin, from_, target, command, args)
+				module.do_command(context, from_, target, command, args)
 
 
 def is_identified(bot, nick):

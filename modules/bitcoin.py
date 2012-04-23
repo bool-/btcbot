@@ -22,9 +22,11 @@ def resolve_firstbits(address):
 	except urllib.error.URLError as e:
 		return None
 
-def do_command(bot, bitcoin, from_, target, command, args):
+def do_command(context, from_, target, command, args):
 	nick = from_[0]
 	nick = nick.lower()
+	bot = context['bot']
+	bitcoin = context['bitcoin']
 	try:
 		if command == 'deposit':
 			address = bitcoin.getaccountaddress(nick)
