@@ -1,0 +1,24 @@
+{
+	"servers":
+	[
+		{
+			"server": "wright.freenode.net",
+			"port": 6667,
+			"nick": "btcbot",
+			"user": "btcbot"
+		}
+	],
+	"bitcoin": 
+	{
+		"server": "127.0.0.1",
+		"port": 8332,
+		"user": "btcbot",
+		"pass": "password"
+	},
+	"modules": 
+	[ 
+		"modules.raffle", 
+		"modules.bitcoin", 
+		"modules.gambling" 
+	]
+}

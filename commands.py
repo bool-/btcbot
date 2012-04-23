@@ -1,27 +1,31 @@
-from modules import bitcoin
-from modules import gambling
-from modules import raffle
 from jsonrpc import ServiceProxy
 import imp
 
-# TODO figure out a way to load this dynamically
 MODULES = [ ]
 
-bitcoin = ServiceProxy('http://btcbot:password@127.0.0.1:8332')
+bitcoin = None
 
-context =  { 'bitcoin': bitcoin }
+context = { }
 
 def load_modules(modules):
+	global MODULES
+	MODULES = []
 	for module in modules:
 		imp_module = __import__(module, globals(), locals(), [module.split('.')[1]], -1)
 		MODULES.append(imp_module)
 
-def parse_command(bot, from_, target, message):
+def connect_bitcoind(user, password, host, port):
+	global bitcoin
+	bitcoin = ServiceProxy('http://' + user + ':' + password + '@' + host + ':' + str(port) + '/')
+
+def parse_command(bot, config, from_, target, message):
 	nick = from_[0]
 	message_tokens = message.split()
 	command = message_tokens[0]
 	args = message_tokens[1:]
 	context['bot'] = bot
+	context['bitcoin'] = bitcoin
+	context['config'] = config
 
 	if command == 'ident':
 		if nick in bot.identified_users:
@@ -41,6 +45,7 @@ def parse_command(bot, from_, target, message):
 			for module in MODULES:
 				imp.reload(module)
 				bot.notice(nick, module.__name__ + ' reloaded')
+	
 	for module in MODULES:
 		if command in module.COMMANDS:
 			# check for minimum command arity
