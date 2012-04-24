@@ -8,7 +8,7 @@ tickets = []
 def select_winner(context, bitcoin, nick):
 	global tickets
 	bot = context['bot']
-	commission_mul = context['raffle']['commission']
+	commission_mul = context['config']['raffle']['commission']
 	winnings_mul = context['config']['raffle']['winnings']
 	beneficiaries = context['config']['beneficiaries']
 	winner = random.choice(tickets)
