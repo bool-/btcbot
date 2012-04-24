@@ -11,7 +11,6 @@ def select_winner(context, bitcoin, nick):
 	commission_mul = context['config']['raffle']['commission']
 	winnings_mul = context['config']['raffle']['winnings']
 	beneficiaries = context['config']['beneficiaries']
-	print(beneficiaries)
 	winner = random.choice(tickets)
 	balance = float(bitcoin.getbalance('raffle', 1))
 	winnings = round(balance * winnings_mul, 3)
