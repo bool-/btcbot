@@ -20,5 +20,16 @@
 		"modules.raffle", 
 		"modules.bitcoin", 
 		"modules.gambling" 
+	],
+	"beneficiaries": 
+	{
+		"bool_": 1
+	}
+	"raffle":
+	[
+		"commission": 0.05
+		"winnings": 0.75
+		"tipping_point": 1
+		"ticket_price": 0.05
 	]
 }

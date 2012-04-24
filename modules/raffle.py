@@ -2,20 +2,22 @@ from jsonrpc import JSONRPCException
 import random
 
 COMMANDS = { 'raffle':0 }
-TIPPING_POINT = 1
-TICKET_PRICE = 0.05
-COMMISSION_ACCOUNT = 'bool_'
 
 tickets = []
 
-def select_winner(bot, bitcoin, nick):
+def select_winner(context, bitcoin, nick):
 	global tickets
+	bot = context['bot']
+	commission_mul = context['raffle']['commission']
+	winnings_mul = context['raffle']['winnings']
+	beneficiaries = context['config']['beneficiaries']
 	winner = random.choice(tickets)
 	balance = float(bitcoin.getbalance('raffle', 1))
-	winnings = round(balance * 0.75, 3)
-	commission = round(balance * 0.1, 3)
+	winnings = round(balance * winnings_mul, 3)
+	commission = round(balance * commission_mul, 3)
 	bitcoin.move('raffle', winner, winnings)
-	bitcoin.move('raffle', COMMISSION_ACCOUNT, commission)
+	for name, mul in beneficiaries:
+		bitcoin.move('raffle', name, round(commission * mul, 3))
 	bot.notice(winner, 'Congratulations, you have won ' + str(winnings) + ' BTC in the raffle!')
 	bot.privmsg('##btcbot', 'Congratualtions to ' + winner + ' who has won ' + str(winnings) + ' BTC in the raffle!')
 	tickets = []
@@ -31,6 +33,9 @@ def do_command(context, from_, target, command, args):
 	nick = from_[0].lower()
 	bot = context['bot']
 	bitcoin = context['bitcoin']
+	config = context['raffle']
+	ticket_price = config['ticket_price']
+	tipping_point = config['tipping_point']
 	try:
 		if command == 'raffle':
 			ticket_count = 1
@@ -40,7 +45,7 @@ def do_command(context, from_, target, command, args):
 					return
 				ticket_count = int(args[0])
 			balance = float(bitcoin.getbalance(nick, 1))
-			price = ticket_count * TICKET_PRICE
+			price = ticket_count * ticket_price
 			price = round(price, 3)
 			balance = round(balance, 3)
 			if price > balance:
@@ -51,8 +56,8 @@ def do_command(context, from_, target, command, args):
 				tickets.append(nick)
 				random.shuffle(tickets)
 			bot.notice(nick, 'You have purchased ' + str(ticket_count) + ' tickets for ' + str(price) + ' BTC')
-			if len(tickets) * TICKET_PRICE >= TIPPING_POINT:
-				select_winner(bot, bitcoin, from_[0])
+			if len(tickets) * ticket_price >= tipping_point:
+				select_winner(context, bitcoin, from_[0])
 	except JSONRPCException:
 		bot.notice(nick, 'An error has occured communicating with bitcoind, please report this to bool_')
 
