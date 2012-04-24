@@ -17,7 +17,7 @@ def select_winner(context, bitcoin, nick):
 	winnings = round(balance * winnings_mul, 3)
 	commission = round(balance * commission_mul, 3)
 	bitcoin.move('raffle', winner, winnings)
-	for name, mul in beneficiaries:
+	for name, mul in beneficiaries.items():
 		bitcoin.move('raffle', name, round(commission * mul, 3))
 	bot.notice(winner, 'Congratulations, you have won ' + str(winnings) + ' BTC in the raffle!')
 	bot.privmsg('##btcbot', 'Congratualtions to ' + winner + ' who has won ' + str(winnings) + ' BTC in the raffle!')
