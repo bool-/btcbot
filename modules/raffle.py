@@ -41,6 +41,8 @@ def do_command(context, from_, target, command, args):
 				ticket_count = int(args[0])
 			balance = float(bitcoin.getbalance(nick, 1))
 			price = ticket_count * TICKET_PRICE
+			price = round(price, 3)
+			balance = round(balance, 3)
 			if price > balance:
 				bot.notice(nick, 'Sorry, you don\'t have ' + str(price) + ' BTC in your balance')
 				return
