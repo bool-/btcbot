@@ -33,7 +33,7 @@ def do_command(context, from_, target, command, args):
 	nick = from_[0].lower()
 	bot = context['bot']
 	bitcoin = context['bitcoin']
-	config = context['raffle']
+	config = context['config']['raffle']
 	ticket_price = config['ticket_price']
 	tipping_point = config['tipping_point']
 	try:
