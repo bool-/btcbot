@@ -7,6 +7,7 @@ def load_modules(modules_):
 	for module in modules_:
 		imp_module = __import__(module, globals(), locals(), [module.split('.')[1]], -1)
 		modules.append(imp_module)
+		print('Loaded module: ' + imp_module.__name__)
 
 def connect_bitcoind(user, password, host, port):
 	global bitcoin
@@ -38,11 +39,13 @@ def parse_command(bot, config, from_, target, message):
 	
 	for module in modules:
 		if command in module.COMMANDS:
-			if module.PRIVILEGES > 0:
+			if len(module.PERMISSIONS) >  0:
 				if nick not in config['operators']:
-					return
-				elif config['operators'][nick] < module.PRIVILEGES:
-					return
+					continue
+				permissions = config['operators'][nick]
+				for required in module.PERMISSIONS:
+					if required not in permissions:
+						continue
 			# check for minimum command arity
 			if len(args) < module.COMMANDS[command]:
 				module.usage(bot, nick, command)

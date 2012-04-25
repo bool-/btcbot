@@ -2,7 +2,7 @@ from jsonrpc import JSONRPCException
 import urllib.request
 
 COMMANDS = { 'deposit':0, 'balance':0, 'withdraw':1 }
-PRIVILEGES = 0
+PERMISSIONS = []
 
 def is_float(val):
 	try:

@@ -1,7 +1,7 @@
 import imp
 
 COMMANDS = { 'reload': 0 }
-PRIVILEGES = 3
+PERMISSIONS = [ 'botadmin' ]
 
 # TODO add configuration reloading
 def do_command(context, from_, target, command, args):

@@ -11,7 +11,7 @@
 	},
 	"operators": 
 	{ 
-		"bool_": 3 
+		"bool_": [ "btcadmin", "botadmin" ] 
 	},
 	"bitcoin": 
 	{

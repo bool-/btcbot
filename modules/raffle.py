@@ -2,7 +2,7 @@ from jsonrpc import JSONRPCException
 import random
 
 COMMANDS = { 'raffle':0 }
-PRIVILEGES = 0
+PERMISSIONS = []
 
 tickets = []
 

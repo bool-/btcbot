@@ -1,7 +1,7 @@
 from jsonrpc import JSONRPCException
 
 COMMANDS = { 'ubalance':1 }
-PRIVILEGES = 2
+PERMISSIONS = [ 'btcadmin' ]
 
 def do_command(context, from_, target, command, args):
 	nick = from_[0].lower()

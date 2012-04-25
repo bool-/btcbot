@@ -23,6 +23,9 @@ class BitBot(lurklib.Client):
 		if message.startswith('+'):
 			message = message[1:]
 			commands.parse_command(self, config, from_, from_[0], message)
+	def on_nick(self, from_, new_nick):
+		if from_[0] in self.identified_users:
+			self.identified_users.remove(from_[0])
 	def on_quit(self, from_, reason):
 		if from_[0] in self.identified_users:
 			self.identified_users.remove(from_[0])
