@@ -2,6 +2,7 @@ from jsonrpc import JSONRPCException
 import random
 
 COMMANDS = { 'raffle':0 }
+NEEDS_OP = False
 
 tickets = []
 
@@ -56,7 +57,7 @@ def do_command(context, from_, target, command, args):
 				tickets.append(nick)
 				random.shuffle(tickets)
 			bot.notice(nick, 'You have purchased ' + str(ticket_count) + ' tickets for ' + str(price) + ' BTC')
-			if len(tickets) * ticket_price >= tipping_point:
+			if len(tickets) >= tipping_point:
 				select_winner(context, bitcoin, from_[0])
 	except JSONRPCException:
 		bot.notice(nick, 'An error has occured communicating with bitcoind, please report this to bool_')

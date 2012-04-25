@@ -1,13 +1,15 @@
 {
 	"servers":
-	[
-		{
+	{
+		"freenode": {
 			"server": "wright.freenode.net",
 			"port": 6667,
-			"nick": "btcbot",
-			"user": "btcbot"
+			"nick": "btcbot_",
+			"user": "btcbot",
+			"channels": [ "##btcbot-test" ]
 		}
-	],
+	},
+	"operators": [ "bool_" ],
 	"bitcoin": 
 	{
 		"server": "127.0.0.1",
@@ -19,7 +21,9 @@
 	[ 
 		"modules.raffle", 
 		"modules.bitcoin", 
-		"modules.gambling" 
+		"modules.gambling",
+		"modules.bitcoin_admin"
+
 	],
 	"beneficiaries": 
 	{
@@ -29,7 +33,7 @@
 	{
 		"commission": 0.05,
 		"winnings": 0.75,
-		"tipping_point": 1,
+		"tipping_point": 20, 
 		"ticket_price": 0.05
 	}
 }

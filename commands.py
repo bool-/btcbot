@@ -36,7 +36,7 @@ def parse_command(bot, config, from_, target, message):
 		return
 
 	# TODO better way to handle bot operators
-	elif nick in bot.identified_users and nick == 'bool_':
+	if nick in config['operators']:
 		if command == 'reload':
 			for module in MODULES:
 				imp.reload(module)
@@ -44,11 +44,17 @@ def parse_command(bot, config, from_, target, message):
 	
 	for module in MODULES:
 		if command in module.COMMANDS:
+			if module.NEEDS_OP:
+				if nick not in config['operators']:
+					return
 			# check for minimum command arity
 			if len(args) < module.COMMANDS[command]:
 				module.usage(bot, nick, command)
 			else:
-				module.do_command(context, from_, target, command, args)
+				try:
+					module.do_command(context, from_, target, command, args)
+				except Exception as ex:
+					bot.notice(nick, 'An error has occured that prevented the module from working properly')
 
 
 def is_identified(bot, nick):
