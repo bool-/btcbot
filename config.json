@@ -9,7 +9,10 @@
 			"channels": [ "##btcbot-test" ]
 		}
 	},
-	"operators": [ "bool_" ],
+	"operators": 
+	{ 
+		"bool_": 3 
+	},
 	"bitcoin": 
 	{
 		"server": "127.0.0.1",
@@ -22,7 +25,8 @@
 		"modules.raffle", 
 		"modules.bitcoin", 
 		"modules.gambling",
-		"modules.bitcoin_admin"
+		"modules.bitcoin_admin",
+		"modules.bot_admin"
 
 	],
 	"beneficiaries": 

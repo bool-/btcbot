@@ -2,7 +2,7 @@ from jsonrpc import JSONRPCException
 import random
 
 COMMANDS = { 'roulette':1 }
-NEEDS_OP = False
+PRIVILEGES = 0
 WAGER = 0.1
 
 def is_int(val):
