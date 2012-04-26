@@ -39,5 +39,10 @@
 		"winnings": 0.75,
 		"tipping_point": 20, 
 		"ticket_price": 0.05
+	},
+	"roulette":
+	{
+		"winnings": 0.85,
+		"wager": 0.1
 	}
 }

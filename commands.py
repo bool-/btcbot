@@ -54,6 +54,7 @@ def parse_command(bot, config, from_, target, message):
 					module.do_command(context, from_, target, command, args)
 				except Exception as ex:
 					bot.notice(nick, 'An error has occured that prevented the module from working properly')
+					raise
 
 
 def is_identified(bot, nick):

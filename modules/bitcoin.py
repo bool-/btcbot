@@ -32,7 +32,7 @@ def do_command(context, from_, target, command, args):
 			address = bitcoin.getaccountaddress(nick)
 			bot.notice(nick, 'Your deposit address is: ' + address)
 		if command == 'balance':
-			balance = float(bitcoin.getbalance(nick, 1))
+			balance = bitcoin.getbalance(nick, 1)
 			bot.notice(nick, 'Your current balance is: ' + str(balance))
 		if command == 'withdraw':
 			address = args[0]
@@ -47,13 +47,13 @@ def do_command(context, from_, target, command, args):
 				if not valid:
 					bot.notice(nick, 'Please enter a valid bitcoin address')
 					return
-			balance = float(bitcoin.getbalance(nick, 1))
+			balance = bitcoin.getbalance(nick, 1)
 			amount = balance
 			if len(args) == 2:
 				if not is_float(args[1]):
 					bot.notice(nick, 'Please enter a valid amount')
 					return
-				amount = float(args[1])
+				amount = Decimal(args[1])
 				if balance == 0:
 					bot.notice(nick, 'You don\'t have any BTC to withdraw')
 					return
@@ -61,9 +61,9 @@ def do_command(context, from_, target, command, args):
 					bot.notice(nick, 'You can\'t withdraw more than ' + str(balance) + ' BTC')
 					return
 
-			tx_id = bitcoin.sendfrom(nick, address, amount)
+			tx_id = bitcoin.sendfrom(nick, address, float(amount))
 			bot.notice(nick, 'Sent ' + str(amount) + ' BTC to ' + address + ', transaction: ' + tx_id)
-			balance = float(bitcoin.getbalance(nick, 1))
+			balance = bitcoin.getbalance(nick, 1)
 			if balance < 0: # take care of any tax that was applied
 				bitcoin.move('buffer', nick, abs(balance))
 	except JSONRPCException:

@@ -9,7 +9,7 @@ def do_command(context, from_, target, command, args):
 	bitcoin= context['bitcoin']
 	try:
 		if command == 'ubalance':
-			balance = float(bitcoin.getbalance(args[0], 1))
+			balance = bitcoin.getbalance(args[0], 1)
 			bot.notice(nick, args[0] +'\'s current balance is: ' + str(balance))
 	except JSONRPCException:
 		bot.notice(nick, 'An error has occured commincating with bitcoind, please report this to bool_')

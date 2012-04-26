@@ -1,5 +1,6 @@
 from jsonrpc import JSONRPCException
 import random
+import bitcoinutil as btc
 
 COMMANDS = { 'raffle':0 }
 PERMISSIONS = []
@@ -13,14 +14,14 @@ def select_winner(context, bitcoin, nick):
 	winnings_mul = context['config']['raffle']['winnings']
 	beneficiaries = context['config']['beneficiaries']
 	winner = random.choice(tickets)
-	balance = float(bitcoin.getbalance('raffle', 1))
-	winnings = round(balance * winnings_mul, 3)
-	commission = round(balance * commission_mul, 3)
-	bitcoin.move('raffle', winner, winnings)
+	balance = btc.to_btc(bitcoin.getbalance('raffle', 1))
+	winnings = balance * winnings_mul
+	commission = balance * commission_mul
+	bitcoin.move('raffle', winner, btc.to_float(winnings))
 	for name, mul in beneficiaries.items():
-		bitcoin.move('raffle', name, round(commission * mul, 3))
-	bot.notice(winner, 'Congratulations, you have won ' + str(winnings) + ' BTC in the raffle!')
-	bot.privmsg('##btcbot', 'Congratualtions to ' + winner + ' who has won ' + str(winnings) + ' BTC in the raffle!')
+		bitcoin.move('raffle', name, btc.to_float(commission * mul))
+	bot.notice(winner, 'Congratulations, you have won ' + btc.to_string(winnings) + ' BTC in the raffle!')
+	bot.privmsg('##btcbot', 'Congratualtions to ' + winner + ' who has won ' + btc.to_string(winnings) + ' BTC in the raffle!')
 	tickets = []
 
 def is_int(val):
@@ -45,18 +46,17 @@ def do_command(context, from_, target, command, args):
 					bot.notice(nick, 'Please enter a valid ticket count')
 					return
 				ticket_count = int(args[0])
-			balance = float(bitcoin.getbalance(nick, 1))
+			balance = btc.to_btc(bitcoin.getbalance(nick, 1))
 			price = ticket_count * ticket_price
-			price = round(price, 3)
-			balance = round(balance, 3)
+			price = btc.to_btc(price)
 			if price > balance:
-				bot.notice(nick, 'Sorry, you don\'t have ' + str(price) + ' BTC in your balance')
+				bot.notice(nick, 'Sorry, you don\'t have ' + btc.to_string(price) + ' BTC in your balance')
 				return
-			bitcoin.move(nick, 'raffle', price)
+			bitcoin.move(nick, 'raffle', btc.to_float(price))
 			for x in range(0, ticket_count):
 				tickets.append(nick)
 				random.shuffle(tickets)
-			bot.notice(nick, 'You have purchased ' + str(ticket_count) + ' tickets for ' + str(price) + ' BTC')
+			bot.notice(nick, 'You have purchased ' + str(ticket_count) + ' tickets for ' + btc.to_string(price) + ' BTC')
 			if len(tickets) >= tipping_point:
 				select_winner(context, bitcoin, from_[0])
 	except JSONRPCException:

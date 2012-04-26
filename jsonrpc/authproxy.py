@@ -101,7 +101,7 @@ class AuthServiceProxy(object):
 
          resp = httpresp.read()
          resp = resp.decode('utf8')
-         resp = json.loads(resp, parse_float=decimal.Decimal)
+         resp = json.loads(resp)
          if resp['error'] != None:
              raise JSONRPCException(resp['error'])
          elif 'result' not in resp:

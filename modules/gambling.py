@@ -1,9 +1,10 @@
 from jsonrpc import JSONRPCException
+from decimal import *
 import random
+import bitcoinutil as btc
 
 COMMANDS = { 'roulette':1 }
 PERMISSIONS = []
-WAGER = 0.1
 
 def is_int(val):
 	try:
@@ -23,6 +24,9 @@ def do_command(context, from_, target, command, args):
 	nick = nick.lower()
 	bot = context['bot']
 	bitcoin = context['bitcoin']
+	config = context['config']['roulette']
+	wager = config['wager']
+	winnings = config['winnings']
 	try:
 		if command == 'roulette':
 			if not is_int(args[0]):
@@ -32,19 +36,19 @@ def do_command(context, from_, target, command, args):
 			if chamber < 1 or chamber > 6:
 				bot.notice(nick, 'Please enter a valid chamber number 1-6')
 				return
-			balance = bitcoin.getbalance(nick, 1)
-			if WAGER > balance:
-				bot.notice(nick, 'Sorry, you don\'t have ' + str(WAGER) + ' BTC in your balance')
+			balance = btc.to_btc(bitcoin.getbalance(nick, 1))
+			if wager > balance:
+				bot.notice(nick, 'Sorry, you don\'t have ' + str(wager) + ' BTC in your balance')
 				return
-			bitcoin.move(nick, 'roulette', WAGER)
+			bitcoin.move(nick, 'roulette', wager)
 			if roulette(chamber):
-				roulette_bal = float(bitcoin.getbalance('roulette', 1))
-				roulette_bal = round(roulette_bal * 0.85, 3)
-				bitcoin.move('roulette', nick, roulette_bal)
-				bot.notice(nick, 'The gun went *CLICK* and you won ' + str(roulette_bal) + ' BTC.')
-				bot.privmsg('##btcbot', from_[0] + '\'s gun went *CLICK*, winning them ' + str(roulette_bal) + ' BTC.')
+				roulette_bal = btc.to_btc(bitcoin.getbalance('roulette', 1))
+				roulette_bal = roulette_bal * winnings
+				bitcoin.move('roulette', nick, btc.to_float(roulette_bal))
+				bot.notice(nick, 'The gun went *CLICK* and you won ' + btc.to_string(roulette_bal) + ' BTC.')
+				bot.privmsg('##btcbot', from_[0] + '\'s gun went *CLICK*, winning them ' + btc.to_string(roulette_bal) + ' BTC.')
 			else:
-				bot.notice(nick, 'The gun went *BANG* and you lost ' + str(WAGER) + ' BTC.')
+				bot.notice(nick, 'The gun went *BANG* and you lost ' + str(wager) + ' BTC.')
 
 	except JSONRPCException:
 		bot.notice(nick, 'An error has occured communicating with bitcoind, please report this to bool_')
