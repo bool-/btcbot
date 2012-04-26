@@ -36,13 +36,13 @@ def do_command(context, from_, target, command, args):
 			if chamber < 1 or chamber > 6:
 				bot.notice(nick, 'Please enter a valid chamber number 1-6')
 				return
-			balance = btc.to_btc(bitcoin.getbalance(nick, 1))
+			balance = btc.getbalance(bitcoin, nick)
 			if wager > balance:
 				bot.notice(nick, 'Sorry, you don\'t have ' + str(wager) + ' BTC in your balance')
 				return
 			bitcoin.move(nick, 'roulette', wager)
 			if roulette(chamber):
-				roulette_bal = btc.to_btc(bitcoin.getbalance('roulette', 1))
+				roulette_bal = btc.getbalance(bitcoin, 'roulette')
 				roulette_bal = roulette_bal * winnings
 				bitcoin.move('roulette', nick, btc.to_float(roulette_bal))
 				bot.notice(nick, 'The gun went *CLICK* and you won ' + btc.to_string(roulette_bal) + ' BTC.')

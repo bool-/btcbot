@@ -14,7 +14,7 @@ def select_winner(context, bitcoin, nick):
 	winnings_mul = context['config']['raffle']['winnings']
 	beneficiaries = context['config']['beneficiaries']
 	winner = random.choice(tickets)
-	balance = btc.to_btc(bitcoin.getbalance('raffle', 1))
+	balance = btc.getbalance(bitcoin, 'raffle')
 	winnings = balance * winnings_mul
 	commission = balance * commission_mul
 	bitcoin.move('raffle', winner, btc.to_float(winnings))
@@ -46,7 +46,7 @@ def do_command(context, from_, target, command, args):
 					bot.notice(nick, 'Please enter a valid ticket count')
 					return
 				ticket_count = int(args[0])
-			balance = btc.to_btc(bitcoin.getbalance(nick, 1))
+			balance = btc.getbalance(bitcoin, nick)
 			price = ticket_count * ticket_price
 			price = btc.to_btc(price)
 			if price > balance:

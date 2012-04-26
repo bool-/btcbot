@@ -8,3 +8,6 @@ def to_string(value):
 
 def to_float(value):
 	return float(value / 1e8)
+
+def getbalance(bitcoin, account):
+	return to_btc(bitcoin.getbalance(account, 1))
