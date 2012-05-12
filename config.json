@@ -2,7 +2,7 @@
 	"servers":
 	{
 		"freenode": {
-			"server": "wright.freenode.net",
+			"server": "irc.freenode.net",
 			"port": 6667,
 			"nick": "btcbot_",
 			"user": "btcbot",
@@ -36,7 +36,7 @@
 	"raffle":
 	{
 		"commission": 0.05,
-		"winnings": 0.75,
+		"winnings": 0.95,
 		"tipping_point": 20, 
 		"ticket_price": 0.05
 	},
